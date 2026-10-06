@@ -32,18 +32,18 @@
         <h3 style="margin-top:0;">Регистрация сотрудника</h3>
         <div class="form-group">
             <label for="last-name">Шаг 1/3. Фамилия:</label>
-            <input type="text" id="last-name" placeholder="Например: Ivanov">
-            <div id="err-last-name" class="error-msg hidden">Фамилия должна содержать только буквы</div>
+            <input type="text" id="last-name" placeholder="Например: Иванов">
+            <div id="err-last-name" class="error-msg hidden">Поле «Фамилия» не заполнено</div>
         </div>
         <div class="form-group">
             <label for="first-name">Шаг 2/3. Имя и Отчество (или инициалы):</label>
             <input type="text" id="first-name" placeholder="Например: Иван Петрович">
-            <div id="err-first-name" class="error-msg hidden">Поле обязательно для заполнения</div>
+            <div id="err-first-name" class="error-msg hidden">Поле «Имя и Отчество» не заполнено</div>
         </div>
         <div class="form-group">
             <label for="department">Шаг 3/3. Отдел / Департамент:</label>
             <input type="text" id="department" placeholder="Например: Отдел технической поддержки">
-            <div id="err-department" class="error-msg hidden">Укажите ваш отдел</div>
+            <div id="err-department" class="error-msg hidden">Поле «Отдел / Департамент» не заполнено</div>
         </div>
         <p style="font-size:14px; color:#6c757d; line-height:1.4;">⚠️ <strong>Правила:</strong> На весь тест из 15 вопросов выделено ровно 15 минут. Время обновляется каждую секунду. При таймауте тест закроется автоматически, сохранив текущие верные ответы.</p>
         <button onclick="startTest()">Запустить таймер и начать тест</button>
@@ -97,7 +97,8 @@ const ln = document.getElementById('last-name').value.trim();
 const fn = document.getElementById('first-name').value.trim();
 const dept = document.getElementById('department').value.trim();
 let valid = true;
-if(!/^[А-Яа-яЁёA-Za-zА-Яа-яЁё\s-]+$/.test(ln)) {
+// Упрощенная проверка: поле просто не должно быть пустым
+if(!ln) {
 document.getElementById('err-last-name').classList.remove('hidden');
 valid = false;
 } else {
