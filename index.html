@@ -20,6 +20,7 @@
         .option-lbl:hover { background: #e2e6ea; }
         input[type="radio"] { margin-right: 12px; transform: scale(1.2); cursor: pointer; }
         .error-msg { color: var(--primary); font-size: 14px; margin-top: 5px; font-weight: bold; }
+        #email-status { margin-top: 15px; padding: 10px; border-radius: 6px; text-align: center; font-size: 14px; display: none; }
     </style>
 </head>
 <body>
@@ -41,13 +42,14 @@
         </div>
         <div class="form-group">
             <label for="department">Шаг 3/3. Отдел / Департамент:</label>
-            <input type="text" id="department" placeholder="Например: Отдел технической поддержки">
+            <input type="text" id="department" placeholder="Например: В2В">
             <div id="err-department" class="error-msg hidden">Укажите ваш отдел</div>
         </div>
         <p style="font-size:14px; color:#6c757d; line-height:1.4;">
             ⚠️ <strong>Правила:</strong> На весь тест из 15 вопросов выделено ровно 15 минут.
             Время обновляется каждую секунду. При таймауте тест закроется автоматически,
             сохранив текущие верные ответы. Вопросы выпадают в случайном порядке.
+            Результаты автоматически отправляются на почту руководителя.
         </p>
         <button type="button" onclick="startTest()">Запустить таймер и начать тест</button>
     </div>
@@ -70,16 +72,16 @@
             <tr><td style="padding:8px 0; font-weight:bold;">Затраченное время:</td><td id="res-time"></td></tr>
             <tr><td style="padding:8px 0; font-weight:bold;">Итоговый вердикт:</td><td id="res-verd" style="font-weight:bold;"></td></tr>
         </table>
+        <div id="email-status"></div>
         <button type="button" onclick="downloadCSV()" style="background:#28a745;">Скачать CSV-ведомость для руководителя</button>
     </div>
 </div>
 
 <script>
-    // Исходная база вопросов
     const sourceQuestions = [
         { id: 1, q: "Какое явление характеризуется образованием видимой борозды с оттеснением материала в стороны и по направлению скольжения пар трения?", o: ["Заедание", "Задир", "Усталостное выкрашивание", "Питтинг"], c: "Задир" },
-        { id: 2, q: "Как влияет увеличение показателя высокотемпературной вязкости HTHS на свойства моторного масла?", o: ["Увеличивает экономию топлива, но снижает защиту", "Увеличивает толщину масляной пленки в нагруженных узлах и защиту ДВС, но снижает экономию топлива", "Снижает температуру застывания масла", "Никак не влияет"], c: "Увеличивает толщину масляной пленки в нагруженных узлах и защиту ДВС, но снижает экономию топлива" },
-        { id: 3, q: "К каким последствиям приводит использование полнозольных моторных масел (Full SAPS) в дизельных двигателях, оборудованных сажевыми фильтрами (DPF)?", o: ["К увеличинию мощности двигателя", "К улучшению фильтрации выхлопных газов", "К быстрому забиванию фильтра несгораемыми веществами присадок, которые не удаляются при регенерации", "К снижению рабочей температуры катализатора"], c: "К быстрому забиванию фильтра несгораемыми веществами присадок, которые не удаляются при регенерации" },
+        { id: 2, q: "Как влияет увеличение показателя высокотемпературной вязкости HTHS на свойства моторного масла?", o: ["Увеличивает экономию топлива, но снижает защиту", "Увеличивает толщину масляной пленки в нагруженных узлах и защиту ДВС, но снижает экономию топлива", "Снижает защиту ДВС масла", "Никак не влияет"], c: "Увеличивает толщину масляной пленки в нагруженных узлах и защиту ДВС, но снижает экономию топлива" },
+        { id: 3, q: "К каким последствиям приводит использование полнозольных моторных масел (Full SAPS) в дизельных двигателях, оборудованных сажевыми фильтрами (DPF)?", o: ["К увеличинию мощности двигателя", "К улучшению фильтрации выхлопных газов", "К быстрому забиванию фильтра несгораемыми веществами присадок, которые не удаляются при регенерации", "К увеличению рабочей температуры катализатора"], c: "К быстрому забиванию фильтра несгораемыми веществами присадок, которые не удаляются при регенерации" },
         { id: 4, q: "Какое явление в бензиновых двигателях с турбонаддувом и прямым впрыском (TGDI) называется эффектом LSPI?", o: ["Преждевременное термическое разложение лаков", "Низкоскоростное предварительное самовоспламенение топливной смеси в процессе сжатия", "Временная потеря вязкости из-за деструкции полимера", "Высокотемпературный угар базового масла"], c: "Низкоскоростное предварительное самовоспламенение топливной смеси в процессе сжатия" },
         { id: 5, q: "Чем принципиально отличаются тракторные трансмиссионно-гидравлические масла класса UTTO от масел класса STOU?", o: ["Масла UTTO предназначены только для гидравлики, а STOU — только для мостов", "Масла STOU являются универсальными и могут применяться в том числе в двигателе, а масла UTTO для двигателя не предназначены", "Масла UTTO содержат силиконовые присадки, а STOU — нет", "Масла UTTO — это неорганические жидкости, а STOU — карбоксилатные"], c: "Масла STOU являются универсальными и могут применяться в том числе в двигателе, а масла UTTO для двигателя не предназначены" },
         { id: 6, q: "В чем заключается ключевая особенность воздействия органической технологии антифризов (OAT / Карбоксилатных) по сравнению с неорганической?", o: ["Карбоксилаты покрывают всю систему толстым защитным слоем, ухудшая теплообмен", "Карбоксилаты создают защитный слой локально — только в местах начала возникновения коррозии, сохраняя эффективный теплоотвод", "Они закипают при более низкой температуре (около 80-90°C)", "Требуют обязательного добавления присадок SCA при каждой замене масла"], c: "Карбоксилаты создают защитный слой локально — только в местах начала возникновения коррозии, сохраняя эффективный теплоотвод" },
@@ -96,10 +98,9 @@
 
     let testQuestions = [];
     let currentQuestion = 0, score = 0, timeLeft = 15 * 60;
-    let empFio = '', empDept = '', testStatus = 'Завершено', timerInterval;
-    let detailedLog = [];
+    let empFio = '', empDept = '', empLastName = '', testStatus = 'Завершено', timerInterval;
+    let answersLog = [];
 
-    // Алгоритм Фишера-Йетса
     function shuffle(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -116,22 +117,25 @@
 
         if (ln === "") { document.getElementById('err-last-name').classList.remove('hidden'); valid = false; }
         else { document.getElementById('err-last-name').classList.add('hidden'); }
-
         if (fn === "") { document.getElementById('err-first-name').classList.remove('hidden'); valid = false; }
         else { document.getElementById('err-first-name').classList.add('hidden'); }
-
         if (dept === "") { document.getElementById('err-department').classList.remove('hidden'); valid = false; }
         else { document.getElementById('err-department').classList.add('hidden'); }
-
         if (!valid) return;
 
-        empFio = ln.toUpperCase() + ' ' + fn;
+        empLastName = ln.toUpperCase();
+        empFio = empLastName + ' ' + fn;
         empDept = dept;
 
-        // Глубокая копия + перемешивание вопросов и вариантов
         testQuestions = JSON.parse(JSON.stringify(sourceQuestions));
         shuffle(testQuestions);
         testQuestions.forEach(item => shuffle(item.o));
+
+        answersLog = [];
+        currentQuestion = 0;
+        score = 0;
+        timeLeft = 15 * 60;
+        testStatus = 'Завершено';
 
         document.getElementById('auth-screen').classList.add('hidden');
         document.getElementById('test-screen').classList.remove('hidden');
@@ -157,7 +161,6 @@
             endTest();
             return;
         }
-
         const qData = testQuestions[currentQuestion];
         document.getElementById('question-title').innerText =
             'Вопрос ' + (currentQuestion + 1) + ' из ' + testQuestions.length + ': ' + qData.q;
@@ -188,10 +191,11 @@
 
         if (isCorrect) score++;
 
-        detailedLog.push(
-            'Впр_' + (currentQuestion + 1) + ':' + chosenText +
-            '(' + (isCorrect ? 'Истина' : 'Ложь') + ')'
-        );
+        answersLog.push({
+            q: qData.q,
+            a: chosenText,
+            correct: isCorrect
+        });
 
         currentQuestion++;
         renderQuestion();
@@ -225,6 +229,65 @@
         document.getElementById('res-time').innerText =
             Math.floor(timeUsed / 60) + 'м ' + (timeUsed % 60) + 'с';
         document.getElementById('res-verd').innerText = verd;
+
+        sendResultsEmail(pct, timeUsed, verd);
+    }
+
+    function sendResultsEmail(pct, timeUsed, verd) {
+        const statusEl = document.getElementById('email-status');
+        statusEl.style.display = 'block';
+        statusEl.style.background = '#fff3cd';
+        statusEl.style.color = '#856404';
+        statusEl.innerHTML = '⏳ Отправка результатов на skoyl@avtomasla.su...';
+
+        // Формируем HTML-тело письма
+        let htmlBody = `
+            <div style="font-family: Arial, sans-serif; font-size: 14px; line-height: 1.5;">
+                <p><strong>1. Сотрудник:</strong> ${empFio} | Отдел: ${empDept}</p>
+                <p><strong>2. Результат:</strong> ${score} из ${testQuestions.length} (${pct.toFixed(1)}%) | ${testStatus} | Вердикт: ${verd} | Время: ${Math.floor(timeUsed/60)}м ${timeUsed%60}с</p>
+                <hr>
+        `;
+
+        answersLog.forEach((item, idx) => {
+            if (item.correct) {
+                // Правильный ответ — обычный чёрный
+                htmlBody += `<p>${idx + 1}. ${item.q} — ${item.a}</p>`;
+            } else {
+                // Неправильный ответ — красным
+                htmlBody += `<p style="color: #c9141c; font-weight: bold;">${idx + 1}. ${item.q} — ${item.a} <span style="background:#ffebee; padding:2px 6px; border-radius:3px;">НЕВЕРНО</span></p>`;
+            }
+        });
+
+        htmlBody += `</div>`;
+
+        // Тема: "Тест-ФАМИЛИЯ"
+        const subject = `Тест-${empLastName}`;
+
+        fetch("https://formsubmit.co/ajax/skoyl@avtomasla.su", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                _subject: subject,
+                message: htmlBody,
+                _template: "box",
+                _captcha: "false"
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            statusEl.style.background = '#d4edda';
+            statusEl.style.color = '#155724';
+            statusEl.innerHTML = '✅ Результаты успешно отправлены на skoyl@avtomasla.su';
+        })
+        .catch(error => {
+            console.error(error);
+            statusEl.style.background = '#f8d7da';
+            statusEl.style.color = '#721c24';
+            statusEl.innerHTML = '⚠️ Не удалось отправить письмо автоматически. Скачайте CSV и перешлите вручную.';
+        });
     }
 
     function downloadCSV() {
@@ -232,19 +295,19 @@
         const timeUsed = (15 * 60) - timeLeft;
         const tStr = Math.floor(timeUsed / 60) + 'м ' + (timeUsed % 60) + 'с';
         const verd = document.getElementById('res-verd').innerText;
-        const logStr = detailedLog.join(' | ');
 
-        const headers = [
-            "Дата и время", "ФИО сотрудника", "Отдел", "Статус теста",
-            "Баллы", "Процент", "Затрачено времени", "Вердикт", "Аналитика"
-        ];
+        const logStr = answersLog.map((item, i) =>
+            `Впр_${i+1}:${item.a}(${item.correct ? 'Истина' : 'Ложь'})`
+        ).join(' | ');
+
+        const headers = ["Дата и время", "ФИО сотрудника", "Отдел", "Статус теста", "Баллы", "Процент", "Затрачено времени", "Вердикт", "Аналитика"];
         const row = [
             new Date().toLocaleString('ru-RU'),
             empFio, empDept, testStatus,
             score, pct, tStr, verd, logStr
         ];
 
-        let csvContent = "\uFEFF"; // BOM for Excel
+        let csvContent = "\uFEFF";
         csvContent += headers.join(";") + "\n" +
                       row.map(v => '"' + String(v).replace(/"/g, '""') + '"').join(";");
 
