@@ -18,7 +18,7 @@
         #timer-box { font-size: 18px; font-weight: bold; background: #fff3cd; color: #856404; padding: 12px; border-radius: 6px; text-align: center; margin-bottom: 20px; border: 1px solid #ffeeba; }
         .option-lbl { display: flex; align-items: center; background: #f1f3f5; padding: 12px; margin-bottom: 10px; border-radius: 6px; cursor: pointer; transition: background 0.2s; border: 1px solid #e9ecef; }
         .option-lbl:hover { background: #e2e6ea; }
-        input[type="radio"] { margin-right: 12px; transform: scale(1.2); }
+        input[type="radio"] { margin-right: 12px; transform: scale(1.2); cursor: pointer; }
         .error-msg { color: var(--primary); font-size: 14px; margin-top: 5px; font-weight: bold; }
     </style>
 </head>
@@ -32,13 +32,13 @@
         <h3 style="margin-top:0;">Регистрация сотрудника</h3>
         <div class="form-group">
             <label for="last-name">Шаг 1/3. Фамилия:</label>
-            <input type="text" id="last-name" placeholder="Например: Иванов">
+            <input type="text" id="last-name" placeholder="Например: Ivanov">
             <div id="err-last-name" class="error-msg hidden">Фамилия должна содержать только буквы</div>
         </div>
         <div class="form-group">
             <label for="first-name">Шаг 2/3. Имя и Отчество (или инициалы):</label>
             <input type="text" id="first-name" placeholder="Например: Иван Петрович">
-            <div id="err-first-name" class="error-msg hidden">This field is required / Поле обязательно для заполнения</div>
+            <div id="err-first-name" class="error-msg hidden">Поле обязательно для заполнения</div>
         </div>
         <div class="form-group">
             <label for="department">Шаг 3/3. Отдел / Департамент:</label>
@@ -78,7 +78,7 @@
         { q: "3. К каким последствиям приводит использование полнозольных моторных масел (Full SAPS) в дизельных двигателях, оборудованных сажевыми фильтрами (DPF)?", o: ["К увеличинию мощности двигателя", "К улучшению фильтрации выхлопных газов", "К быстрому забиванию фильтра несгораемыми веществами присадок, которые не удаляются при регенерации", "К снижению рабочей температуры катализатора"], c: 2, r: "Презентация 'Масла для тяжелонагруженных дизельных двигателей', стр. 8" },
         { q: "4. Какое явление в бензиновых двигателях с турбонаддувом и прямым впрыском (TGDI) называется эффектом LSPI?", o: ["Преждевременное термическое разложение лаков", "Низкоскоростное предварительное самовоспламенение топливной смеси в процессе сжатия", "Временная потеря вязкости из-за деструкции полимера", "Высокотемпературный угар базового масла"], c: 1, r: "Презентация 'Масла легкомоторной группы', стр. 7" },
         { q: "5. Чем принципиально отличаются тракторные трансмиссионно-гидравлические масла класса UTTO от масел класса STOU?", o: ["Масла UTTO предназначены только для гидравлики, а STOU — только для мостов", "Масла STOU являются универсальными и могут применяться в том числе в двигателе, а масла UTTO для двигателя не предназначены", "Масла UTTO содержат силиконовые присадки, а STOU — нет", "Масла UTTO — это неорганические жидкости, а STOU — карбоксилатные"], c: 1, r: "Презентация 'Масла для автоматических трансмиссий', стр. 28, 42" },
-        { q: "6. В чем заключается ключевая особенность воздействия органической технологии антифризов (OAT / Карбоксилатных) по сравнению с неорганической?", o: ["Карбоксилаты покрывают всю систему толстым защитным слоем, ухудшая теплообмен", "Карбоксилаты создают защитный слой локально — только в местах начала возникновения коррозии, сохраняя эффективный теплоотвод", "Оней закипают при более низкой температуре (около 80-90°C)", "Требуют обязательного добавления присадок SCA при каждой замене масла"], c: 1, r: "Презентация 'Охлаждающие жидкости', стр. 13, 14" },
+        { q: "6. В чем заключается ключевая особенность воздействия органической технологии антифризов (OAT / Карбоксилатных) по сравнению с неорганической?", o: ["Карбоксилаты покрывают всю систему толстым защитным слоем, ухудшая теплообмен", "Карбоксилаты создают защитный слой локально — только в местах начала возникновения коррозии, сохраняя эффективный теплоотвод", "Они закипают при более низкой температуре (около 80-90°C)", "Требуют обязательного добавления присадок SCA при каждой замене масла"], c: 1, r: "Презентация 'Охлаждающие жидкости', стр. 13, 14" },
         { q: "7. Какая из перечисленных тормозных жидкостей по классификации DOT имеет силиконовую основу и категорически не должна смешиваться с гликолевыми жидкостями?", o: ["DOT 3", "DOT 4", "DOT 5", "DOT 5.1"], c: 2, r: "Презентация 'Тормозные жидкости', стр. 36, 37" },
         { q: "8. Какая основная причина старения смазочного материала заложена в базовых понятиях трибологии?", o: ["Испарение депрессорных присадок", "Окисление его основы (базового масла) под воздействием температур и кислорода", "Постоянное увеличение индекса вязкости", "Снижение плотности при 15°C"], c: 1, r: "Презентация 'Основные понятия', стр. 9" },
         { q: "9. Какой документ производителя является официальным удостоверением потребительских и качественных характеристик для каждой конкретной партии продукции?", o: ["TDS (Technical Data Sheet)", "ПК (Паспорт качества)", "MSDS (Паспорт безопасности)", "Карта смазки агрегата"], c: 1, r: "Презентация 'Основные понятия', стр. 8" },
@@ -86,7 +86,7 @@
         { q: "11. Какие функциональные присадки вводятся в готовое масло для предотвращения агломерации и слипания продуктов окисления, а также для борьбы с образованием шлама?", o: ["Детергенты", "Дисперсанты", "Антиокислители", "Депрессоры"], c: 1, r: "Презентация 'Масла для тяжелонагруженных дизельных двигателей', стр. 4" },
         { q: "12. Спецификация какого автомобильного концерна (OEM) разделяет свои допуски на уровни 229.1, 229.3, 229.5 и 229.31, 229.51?", o: ["BMW", "Volkswagen-Audi", "Mercedes-Benz", "General Motors"], c: 2, r: "Презентация 'Масла легкомоторной группы', стр. 26" },
         { q: "13. Каким базовым свойством для защиты узлов трения должны обладать трансмиссионные масла класса API GL-5 в отличие от масел класса API GL-4?", o: ["Иметь более низкую вязкость для экономии топлива", "Обладать значительно более высоким уровнем противозадирных присадок (ЕР) для защиты гипоидных передач", "Не содержать соединений серы и фосфора", "Разрабатываться исключительно на минеральной основе I группы"], c: 1, r: "Презентация 'Масла для трансмиссий', стр. 37, 40" },
-        { q: "14. Какие классы чистоты гидравлической жидкости наиболее жестко нормируют количество твердых частиц загрязнений на 1 мл по размерам?", o: ["Классификация по DIN 51524", "Стандарт ISO 4406", "Классификация по SAE J300", "Метод Ноак (ASTM D5800)"], c: 1, r: "Презентация 'Гидравлические浅 масла', стр. 42" },
+        { q: "14. Какие классы чистоты гидравлической жидкости наиболее жестко нормируют количество твердых частиц загрязнений на 1 мл по размерам?", o: ["Классификация по DIN 51524", "Стандарт ISO 4406", "Классификация по SAE J300", "Метод Ноак (ASTM D5800)"], c: 1, r: "Презентация 'Гидравлические масла', стр. 42" },
         { q: "15. Какое негативное физическое явление в гидравлических насосах и ОЖ характеризуется образованием и мгновенным схлопыванием пузырьков пара, что приводит к разрушению металла эрозией?", o: ["Микродизелинг", "Кавитация", "Аэрация", "Гидролиз"], c: 1, r: "Презентация 'Гидравлические масла', стр. 31 / 'Охлаждающие жидкости', стр. 31" }
 ];
 let currentQuestion = 0, score = 0, timeLeft = 15 * 60;
@@ -97,8 +97,7 @@ const ln = document.getElementById('last-name').value.trim();
 const fn = document.getElementById('first-name').value.trim();
 const dept = document.getElementById('department').value.trim();
 let valid = true;
-// Валидация полей
-if(!/^[А-Яа-яЁёA-Za-z-]+$/.test(ln)) {
+if(!/^[А-Яа-яЁёA-Za-zА-Яа-яЁё\s-]+$/.test(ln)) {
 document.getElementById('err-last-name').classList.remove('hidden');
 valid = false;
 } else {
@@ -131,9 +130,10 @@ testStatus = "Провалено (Таймаут)";
 endTest();
 return;
 }
-let m = Math.floor(timeLeft / 60), s = timeLeft % 60;
+let m = Math.floor(timeLeft / 60);
+let s = timeLeft % 60;
 let formattedSecs = s < 10 ? '0' + s : s;
-document.getElementById('timer-box').innerHTML = ⏳ ОСТАЛОСЬ ВРЕМЕНИ: ${m}:${formattedSecs};
+document.getElementById('timer-box').innerHTML = '⏳ ОСТАЛОСЬ ВРЕМЕНИ: ' + m + ':' + formattedSecs;
 }
 function renderQuestion() {
 if(currentQuestion >= questions.length) {
@@ -141,10 +141,10 @@ endTest();
 return;
 }
 let qData = questions[currentQuestion];
-document.getElementById('question-title').innerText = Вопрос ${currentQuestion + 1} из ${questions.length}: ${qData.q};
+document.getElementById('question-title').innerText = 'Вопрос ' + (currentQuestion + 1) + ' из ' + questions.length + ': ' + qData.q;
 let html = '';
 qData.o.forEach((opt, idx) => {
-html += <label class="option-lbl"><input type="radio" name="lukoil-opt" value="${idx}"> ${['А','Б','В','Г'][idx]}) ${opt}</label>;
+html += ' ' + ['А','Б','В','Г'][idx] + ') ' + opt + '';
 });
 document.getElementById('options-container').innerHTML = html;
 }
@@ -158,8 +158,7 @@ let val = parseInt(selected.value);
 let qData = questions[currentQuestion];
 let isCorrect = (val === qData.c);
 if(isCorrect) score++;
-// ИСПРАВЛЕНО: Исправлен метод с .append() на .push() для массивов в JavaScript
-detailedLog.push(Вопрос ${currentQuestion+1}:${['А','Б','В','Г'][val]}(${isCorrect ? '*' : 'X'}));
+detailedLog.push('Вопрос ' + (currentQuestion+1) + ':' + ['А','Б','В','Г'][val] + '(' + (isCorrect ? '*' : 'X') + ')');
 currentQuestion++;
 renderQuestion();
 }
@@ -182,20 +181,20 @@ verd = 'ТАЙМАУТ';
 }
 document.getElementById('res-fio').innerText = empFio;
 document.getElementById('res-dept').innerText = empDept;
-document.getElementById('res-score').innerText = ${score} из ${questions.length} (${pct.toFixed(1)}%);
-document.getElementById('res-time').innerText = ${Math.floor(timeUsed/60)}м ${timeUsed%60}с;
+document.getElementById('res-score').innerText = score + ' из ' + questions.length + ' (' + pct.toFixed(1) + '%)';
+document.getElementById('res-time').innerText = Math.floor(timeUsed/60) + 'м ' + (timeUsed%60) + 'с';
 document.getElementById('res-verd').innerText = verd;
 }
 function downloadCSV() {
 let pct = ((score / questions.length) * 100).toFixed(1) + '%';
 let timeUsed = (15 * 60) - timeLeft;
-let tStr = ${Math.floor(timeUsed/60)}м ${timeUsed%60}с;
+let tStr = Math.floor(timeUsed/60) + 'м ' + (timeUsed%60) + 'с';
 let verd = document.getElementById('res-verd').innerText;
 let logStr = detailedLog.join(' | ');
 let headers = ["Дата и время", "ФИО сотрудника", "Отдел", "Статус теста", "Баллы", "Процент", "Затрачено времени", "Вердикт", "Аналитика"];
 let row = [new Date().toLocaleString(), empFio, empDept, testStatus, score, pct, tStr, verd, logStr];
-let csvContent = "\uFEFF"; // BOM для корректного отображения кириллицы в Excel
-csvContent += headers.join(";") + "\n" + row.map(v => "${v}").join(";");
+let csvContent = "\uFEFF";
+csvContent += headers.join(";") + "\n" + row.map(v => '"' + v + '"').join(";");
 let blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
 let link = document.createElement("a");
 link.href = URL.createObjectURL(blob);
