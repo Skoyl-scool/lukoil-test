@@ -98,7 +98,6 @@ const ln = document.getElementById('last-name').value.trim();
 const fn = document.getElementById('first-name').value.trim();
 const dept = document.getElementById('department').value.trim();
 let valid = true;
-// Надежная и простая проверка на заполненность строк
 if (ln === "") { document.getElementById('err-last-name').classList.remove('hidden'); valid = false; }
 else { document.getElementById('err-last-name').classList.add('hidden'); }
 if (fn === "") { document.getElementById('err-first-name').classList.remove('hidden'); valid = false; }
